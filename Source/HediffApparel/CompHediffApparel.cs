@@ -26,6 +26,9 @@ namespace HediffApparel
 
     public class CompHediffApparel : ThingComp
     {
+        public const string AddHediffsToPawnSignal = "HediffApparel_AddHediffsToPawnSignal";
+        public const string RemoveHediffsFromPawnSignal = "HediffApparel_RemoveHediffsFromPawnSignal";
+
         public CompProperties_HediffApparel Props => (CompProperties_HediffApparel)base.props;
 
         private float lastSeverity;
@@ -164,6 +167,27 @@ namespace HediffApparel
 
             // We've been destroyed, so remove our effects.
             MyRemoveHediffs(lastWearer);
+        }
+
+        public override void ReceiveCompSignal(string signal)
+        {
+            switch (signal)
+            {
+                case AddHediffsToPawnSignal:
+                    // When the AddHediffsToPawnSignal unique signal is received, add hediff to the new wearer
+                    this.lastWearer = (parent as Apparel)?.Wearer;
+                    this.MyAddHediffs(this.lastWearer);
+                    break;
+                case RemoveHediffsFromPawnSignal:
+                    // When the RemoveHediffsFromPawnSignal unique signal is received, remove all applied hediffs
+                    this.MyRemoveHediffs(this.lastWearer);
+                    this.lastWearer = null;
+                    break;
+                default:
+                    // Handle the non-HediffApparel signals
+                    base.ReceiveCompSignal(signal);
+                    break;
+            }
         }
 
         public override void CompTick()
