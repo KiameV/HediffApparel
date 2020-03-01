@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using RimWorld;
 using System;
 using System.Reflection;
@@ -11,7 +11,7 @@ namespace HediffApparel
     {
         static HarmonyPatches()
         {
-            var harmony = HarmonyInstance.Create("com.hediffapparel.rimworld.mod");
+            var harmony = new Harmony("com.hediffapparel.rimworld.mod");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
             Log.Message(
                 "HediffApparel Harmony Patches:" + Environment.NewLine +
@@ -24,18 +24,26 @@ namespace HediffApparel
     [HarmonyPatch(typeof(Pawn_ApparelTracker), "Notify_ApparelAdded")]
     static class Patch_Pawn_ApparelTracker_Notify_ApparelAdded
     {
+        [HarmonyPriority(Priority.First)]
         public static void Postfix(Apparel apparel)
         {
-            apparel.BroadcastCompSignal(CompHediffApparel.AddHediffsToPawnSignal);
+            if (apparel.Wearer != null)
+            {
+                apparel.BroadcastCompSignal(CompHediffApparel.AddHediffsToPawnSignal);
+            }
         }
     }
 
     [HarmonyPatch(typeof(Pawn_ApparelTracker), "Notify_ApparelRemoved")]
     static class Patch_Pawn_ApparelTracker_Notify_ApparelRemoved
     {
+        [HarmonyPriority(Priority.First)]
         public static void Postfix(Apparel apparel)
         {
-            apparel.BroadcastCompSignal(CompHediffApparel.RemoveHediffsFromPawnSignal);
+            if (apparel.Wearer == null)
+            {
+                apparel.BroadcastCompSignal(CompHediffApparel.RemoveHediffsFromPawnSignal);
+            }
         }
     }
 }
