@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using RimWorld;
-using System;
 using System.Reflection;
 using Verse;
 
@@ -13,11 +12,6 @@ namespace HediffApparel
         {
             var harmony = new Harmony("com.hediffapparel.rimworld.mod");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
-            Log.Message(
-                "HediffApparel Harmony Patches:" + Environment.NewLine +
-                "  Postfix:" + Environment.NewLine +
-                "    Pawn_ApparelTracker.Notify_ApparelAdded" + Environment.NewLine +
-                "    Pawn_ApparelTracker.Notify_ApparelRemoved");
         }
     }
 

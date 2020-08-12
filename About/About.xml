@@ -6,6 +6,7 @@
   <supportedVersions>
     <li>1.0</li>
     <li>1.1</li>
+    <li>1.2</li>
   </supportedVersions>
   <packageId>hediffapparel.rw</packageId>
   <description>Adds a ThingComp usable in apparel defs to inflict hediffs on the wearer, without any C# required.</description>
